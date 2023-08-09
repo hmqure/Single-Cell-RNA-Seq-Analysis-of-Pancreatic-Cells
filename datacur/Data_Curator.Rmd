@@ -1,0 +1,115 @@
+---
+title: "Data_Curator"
+author: "go001"
+date: "4/22/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+SRR3879604 = read.csv(file = "Barcode_read_SRR3879604_1_bc.fastq")
+SRR3879605 = read.csv(file = "Barcode_read_SRR3879605_1_bc.fastq.csv")
+SRR3879606 = read.csv(file = "Barcode_read_SRR3879606_1_bc.fastq.csv")
+```
+
+#Stats about the different samples
+```{r}
+
+data = SRR3879604
+Run = "SRR3879604"
+str(data)
+log(data$read_count[data$read_count>0])
+log(data2$read_count[data$read_count>0])
+CDF1 <- ecdf(c(log(data$read_count[data$read_count>0]),log(data2$read_count[data$read_count>0])),group=g, col=c('blue', 'orange' ))
+plot(CDF1)
+
+num_barcodes = nrow(data)
+print(sprintf("There are %s reads with barcodes found in %s",num_barcodes,Run))
+summary(data$read_count)
+
+count_cutoff = 50
+SRR3879604_filtered = data %>% filter(read_count > count_cutoff)
+
+```
+
+
+```{r}
+data2 = SRR3879605
+Run = "SRR3879605"
+num_barcodes = nrow(data)
+print(sprintf("There are %s reads with barcodes found in %s",num_barcodes,Run))
+CDF2 <- ecdf(log(data2$read_count[data$read_count>0]))
+plot(c(CDF1,CDF2))
+summary(data$read_count)
+
+count_cutoff = 50
+SRR3879605_filtered = data %>% filter(read_count > count_cutoff)
+```
+
+```{r}
+data = SRR3879606
+Run = "SRR3879606"
+num_barcodes = nrow(data)
+CDF <- ecdf(log(data$read_count[data$read_count>0]),)
+plot(CDF)
+
+print(sprintf("There are %s reads with barcodes found in %s",num_barcodes,Run))
+
+summary(data$read_count)
+
+count_cutoff = 50
+SRR3879606_filtered = data %>% filter(read_count > count_cutoff)
+```
+
+Output
+```{r}
+data = SRR3879604_filtered
+whitelist = data[1]
+write.table(whitelist,file = "Whitelist_barcode_SRR3879604.csv",quote = F,sep = ",",row.names = F,col.names = F)
+
+data = SRR3879605_filtered
+whitelist = data[1]
+write.table(whitelist,file = "Whitelist_barcode_SRR3879605.csv",quote = F,sep = ",",row.names = F,col.names = F)
+
+data = SRR3879606_filtered
+whitelist = data[1]
+write.table(whitelist,file = "Whitelist_barcode_SRR3879606.csv",quote = F,sep = ",",row.names = F,col.names = F)
+```
+
+```{r}
+DNASeq = c("ATACG","ATATATATATCGCGCATACG","bbbdsadbasbd","asldmlsakmdklmasd")
+grepl(substring,DNASeq)
+searchDNAsubstring <- function( DNASeq, substring = "ATACG"){
+    # grepl returns a list of booleans with indices marked as true if the sequence has the substring
+    DNASeq_With_Substring = grepl(substring,DNASeq) 
+    return(DNASeq[DNASeq_With_Substring])
+}
+
+searchDNAsubstring(DNASeq)
+```
+
+
+```{r}
+library(BUSpaRse)
+library(BiocManager)
+library(BSgenome.Hsapiens.UCSC.hg38)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+BiocManager::install("IsoformSwitchAnalyzeR")
+library(IsoformSwitchAnalyzeR)
+```
+
+```{r}
+gtf = importGTF("Human_refgene.gtf")
+str(gtf)
+txp_file = data.frame(transcript_id = gtf$isoformFeatures$isoform_id, gene_id = gtf$isoformFeatures$gene_id)
+write.table(txp_file,file = "txp2gn_refgene.csv",quote = F,sep = "\t",row.names = F,col.names = F)
+```
+
+
+
+
+

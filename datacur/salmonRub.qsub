@@ -1,0 +1,18 @@
+#!/bin/bash
+
+#$ -P bf528
+#$ -cwd
+#$ -j y
+#$ -pe mpi_16_tasks_per_node 16
+
+
+#run Salmon on Sample SRR3879604
+SampleID=SRR3879604
+SAMPLEFOLDER="/projectnb/bf528/project_4_scrnaseq/fastq/${SampleID}/"
+WHITELIST_PATH="whitelist/Whitelist_barcode_${SampleID}.csv"
+HUMAN_INDEX="salmon_partial_sa_index"
+TXP2GENE="txp2gene.tsv"
+
+module load salmon
+
+salmon alevin -l ISR -1 "${SAMPLEFOLDER}/${SampleID}_1_bc.fastq.gz" -2 "${SAMPLEFOLDER}/${SampleID}_2.fastq.gz" --whitelist ${WHITELIST_PATH} -i ${HUMAN_INDEX} -p 10 -o "${SampleID}.output" --tgMap ${TXP2GENE} --end 5 --barcodeLength 19 --umiLength 6
