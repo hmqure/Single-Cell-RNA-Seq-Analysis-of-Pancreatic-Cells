@@ -1,11 +1,6 @@
 # Project Description
 
-A brief description of what this repository is for and what it contains
-
+Class project from course BF528 in Boston University's M.S. Bioinformatics program: Single Cell RNA-Seq Analysis of Pancreatic Cells, recreating results from Baron, Maayan, Adrian Veres, Samuel L. Wolock, Aubrey L. Faust, Renaud Gaujoux, Amedeo Vetere, Jennifer Hyoje Ryu, et al. 2016. “A Single-Cell Transcriptomic Map of the Human and Mouse Pancreas Reveals Inter- and Intra-Cell Population Structure.” Cell Systems 3 (4): 346–60.e4. PMID: 27667365
 # Contributors
 
-List contributor names and github user names, or email addresses if desired
-
-# Repository Contents
-
-Provide a brief description of each script/code file in this repo, what it does, and how to execute it
+Data Curator: Go Ogata (GitHub: go001) | Programmer: Liz Murphy (GitHub: ecmurphy14) | Analyst: Haroon Qureshi (GitHub: hmqure) | Biologist: Meghana Peshwa (GitHub: meghana-peshwa)
